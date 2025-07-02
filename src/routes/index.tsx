@@ -1,8 +1,9 @@
-import App from "@/App";
-import Tasks from "@/pages/Tasks";
-
-import User from "@/pages/User";
+import App from "@/MainLayout";
 import { createBrowserRouter } from "react-router";
+import AllBooks from "@/pages/AllBooks";
+import AddBooks from "@/pages/AddBooks";
+import BorrowSummary from "@/pages/BorrowSummary";
+import Home from "@/pages/Home";
 
 const router = createBrowserRouter([
   {
@@ -14,15 +15,19 @@ const router = createBrowserRouter([
       {
         // path: "/tasks",
         index: true,
-        Component: Tasks,
+        Component: Home
       },
       {
-        path: "/tasks",
-        Component: Tasks,
+        path: "/all-books",
+        Component: AllBooks,
       },
       {
-        path: "/users",
-        Component: User,
+        path: "/add-books",
+        Component: AddBooks,
+      },
+      {
+        path: "/borrow-summary",
+        Component: BorrowSummary,
       },
     ],
   },
