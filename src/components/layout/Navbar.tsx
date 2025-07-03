@@ -14,8 +14,8 @@ export default function Navbar() {
       </div>
       <div className="flex ml-auto items-center gap-3">
         <Link to="/">Home</Link>
-        <Link to="/all-books">All-Books</Link>
-        <Link to="/add-books">Add-Books</Link>
+        <Link to="/books">All-Books</Link>
+        <Link to="/create-book">Add-Books</Link>
         <Link to="/borrow-summary">Borrow-Summary</Link>
       </div>
       <div className="ml-auto">
