@@ -24,26 +24,39 @@ import { addBook } from "@/redux/features/book/bookSlice";
 import { ALL_BOOK_GENRES } from "@/type";
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import { useCreateBooksMutation } from "@/redux/api/baseApi";
-import { Checkbox } from "@/components/ui/checkbox"
-
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 export default function AddBooks() {
-    // const [open, setOpen] = useState(false);
   const form = useForm();
-//   const dispatch = useAppDispatch();
-const  [createbook, {data, isLoading, isError}] = useCreateBooksMutation();
+
+  const [createbook, { data, isLoading, isError }] = useCreateBooksMutation();
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-    const bookData ={ 
+    
+     try {
+      const bookData = { 
         ...data,
-   
-    }
+        available: data.copies > 0 ? data.available : false
+      }
+      const result = await createbook(bookData).unwrap();
+      toast.promise(result,{
+        success: () => "Book created successfully!",
+        error: "Failed to create Book"
+      })
+      
+     } catch (error) {
+      console.log("Error creating book:", error);
+     }
+
+    console.log(data);
+    const bookData = {
+      ...data,
+    };
     const result = await createbook(bookData).unwrap();
     console.log(result);
-    
+
     form.reset();
-
-
   };
 
   return (
@@ -77,7 +90,7 @@ const  [createbook, {data, isLoading, isError}] = useCreateBooksMutation();
             </FormItem>
           )}
         />
-           <FormField
+        <FormField
           control={form.control}
           name="isbn"
           render={({ field }) => (
@@ -150,40 +163,44 @@ const  [createbook, {data, isLoading, isError}] = useCreateBooksMutation();
             </FormItem>
           )}
         />
-       <FormField
-  control={form.control}
-  name="available"
-  render={({ field }) => {
-    const copies = form.watch("copies");
-    const isAvailable = copies > 0;
-    
-    return (
-      <FormItem className="flex flex-row items-start space-x-3 space-y-0  p-4">
-        <FormControl>
-          <Checkbox
-            checked={isAvailable ? field.value : false}
-            onCheckedChange={(checked: boolean) => {
-              field.onChange(isAvailable ? checked : false);
-            }}
-            disabled={!isAvailable}
-          />
-        </FormControl>
-        <div className="space-y-1 leading-none">
-          <FormLabel>
-            {isAvailable ? "Available for borrowing" : "No copies available"}
-          </FormLabel>
-          {!isAvailable && (
-            <FormDescription className="text-red-500">
-              Cannot mark as available when copies is 0
-            </FormDescription>
-          )}
-        </div>
-      </FormItem>
-    );
-  }}
-/>
+        <FormField
+          control={form.control}
+          name="available"
+          render={({ field }) => {
+            const copies = form.watch("copies");
+            const isAvailable = copies > 0;
+
+            return (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0  p-4">
+                <FormControl>
+                  <Checkbox
+                    checked={isAvailable ? field.value : false}
+                    onCheckedChange={(checked: boolean) => {
+                      field.onChange(isAvailable ? checked : false);
+                    }}
+                    disabled={!isAvailable}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    {isAvailable
+                      ? "Available for borrowing"
+                      : "No copies available"}
+                  </FormLabel>
+                  {!isAvailable && (
+                    <FormDescription className="text-red-500">
+                      Cannot mark as available when copies is 0
+                    </FormDescription>
+                  )}
+                </div>
+              </FormItem>
+            );
+          }}
+        />
         <DialogFooter>
-          <Button type="submit" className="mt-4">Save Changes</Button>
+          <Button type="submit" className="mt-4">
+            Save Changes
+          </Button>
         </DialogFooter>
       </form>
     </Form>

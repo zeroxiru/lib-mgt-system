@@ -1,8 +1,8 @@
 import App from "@/MainLayout";
 import { createBrowserRouter } from "react-router";
-import AllBooks from "@/pages/AllBooks";
-import AddBooks from "@/pages/AddBooks";
-import BorrowSummary from "@/pages/BorrowSummary";
+import AllBooks from "@/pages/Book/AllBooks";
+import AddBooks from "@/pages/Book/AddBooks";
+import BorrowSummary from "@/pages/BorrowSummary/BorrowSummary";
 import Home from "@/pages/Home";
 
 const router = createBrowserRouter([
